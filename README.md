@@ -2,7 +2,7 @@
 
 
 ###System requirements
- `npm` version from 5.5.1 and `node` from 8.5.0
+ `npm` version from 5.7.1 and `node` from 8.10.0
 Run these command to check your version:
 ```
 npm -v
@@ -61,21 +61,32 @@ Common styles are defined at `src/app/app.scss`. Modify this file to change comm
 
 To change each page's style. Please write your style into `src/pages/{page_name}/{page_name}.scss`
 
-### Config Firebase DB 
-To use your own Firebase DB, change Firebase config on src/app.module.ts
+### Config Firestore DB 
+To use your own Firestore DB, change Firebase config on src/app.module.ts
 
 ```
 export const firebaseConfig = {
-  apiKey: "AIzaSyCSe1cjodOoop5KDMIwK0tQ0XyJpyzyzMc",
-  authDomain: "ionic-restaurant-multi.firebaseapp.com",
-  databaseURL: "https://ionic-restaurant-multi.firebaseio.com",
-  projectId: "ionic-restaurant-multi",
-  storageBucket: "ionic-restaurant-multi.appspot.com",
-  messagingSenderId: "370957142335"
+  apiKey: "AIzaSyArG0ImxDKqivsiOnnCWEDA-Q7kvQBpFj8",
+  authDomain: "ionic-restaurant.firebaseapp.com",
+  databaseURL: "https://ionic-restaurant.firebaseio.com",
+  projectId: "ionic-restaurant",
+  storageBucket: "ionic-restaurant.appspot.com",
+  messagingSenderId: "341080880076"
 };
 ```
+### Setup firebase index
 
-Import the file DB/rules.json to Firebase rules. This file contains DB security rules to protect your DB.
+> Cloud Firestore requires an index for every query, to ensure the best performance. All document fields are automatically indexed, so queries that only use equality clauses don't need additional indexes. If you attempt a compound query with a range clause that doesn't map to an existing index, you receive an error. The error message includes a direct link to create the missing index in the Firebase console.
+1. Go to database page on Firebase dashboard
+![enter image description here](https://i.imgur.com/CSUabvt.png)
+
+2. Choose cloud Firestore
+![enter image description here](https://i.imgur.com/BCRwpv9.png)
+
+3. On the Indexs tab, add these indexs
+![enter image description here](https://i.imgur.com/ov6ltC5.png)
+
+For more details: [enter link description here](https://firebase.google.com/docs/firestore/query-data/indexing)
 
 ### Setup firebase functions
 [Cloud Functions](https://firebase.google.com/docs/functions/) for Firebase lets you automatically run backend code in response to events triggered by Firebase features and HTTPS requests. Your code is stored in Google’s cloud and runs in a managed environment. There's no need to manage and scale your own servers.

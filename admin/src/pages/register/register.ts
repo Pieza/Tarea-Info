@@ -1,33 +1,34 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, NavController } from 'ionic-angular';
-import { AuthService } from "../../services/auth-service";
+import { AlertController, NavController } from 'ionic-angular';
 import { HomePage } from "../home/home";
 import { LoginPage } from "../login/login";
+import { UserProvider } from "../../providers/user/user";
+import { LoadingProvider } from "../../providers/loading/loading";
 
 
 /*
-  Generated class for the LoginPage page.
+ Generated class for the LoginPage page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+ See http://ionicframework.com/docs/v2/components/#navigation for more info on
+ Ionic pages and navigation.
+ */
 @Component({
   selector: 'page-register',
   templateUrl: 'register.html',
 })
 export class RegisterPage {
-  restaurantName: any;
-  email: any;
-  password: any;
-  confirmPassword: any;
+  storeName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 
-  constructor(public nav: NavController, public authService: AuthService, public alertCtrl: AlertController,
-              public loadingCtrl: LoadingController) {
+  constructor(public nav: NavController, public alertCtrl: AlertController, public userProvider: UserProvider,
+              public loadingProvider: LoadingProvider) {
   }
 
   // register and go to home page
   register() {
-    if (!this.restaurantName || !this.email || !this.password) {
+    if (!this.storeName || !this.email || !this.password) {
       let alert = this.alertCtrl.create({
         message: 'Please provide restaurant\'s name, email and password',
         buttons: ['OK']
@@ -43,16 +44,13 @@ export class RegisterPage {
       return alert.present();
     }
 
-    let loading = this.loadingCtrl.create({
-      content: 'Please wait...'
-    });
-    loading.present();
+    this.loadingProvider.present('Please wait...');
 
-    this.authService.register(this.email, this.password, this.restaurantName).subscribe(authData => {
-      loading.dismiss();
+    this.userProvider.register(this.email, this.password, this.storeName).subscribe(authData => {
+      this.loadingProvider.dismiss();
       this.nav.setRoot(HomePage);
     }, error => {
-      loading.dismiss();
+      this.loadingProvider.dismiss();
       let alert = this.alertCtrl.create({
         message: error.message,
         buttons: ['OK']

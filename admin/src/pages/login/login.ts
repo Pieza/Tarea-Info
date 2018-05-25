@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, LoadingController } from 'ionic-angular';
-import { HomePage } from "../home/home";
-import { AuthService } from "../../services/auth-service";
+import { NavController, AlertController } from 'ionic-angular';
 import { RegisterPage } from "../register/register";
+import { UserProvider } from "../../providers/user/user";
+import { LoadingProvider } from "../../providers/loading/loading";
 
 
 /*
@@ -19,8 +19,8 @@ export class LoginPage {
   email: any;
   password: any;
 
-  constructor(public nav: NavController, public authService: AuthService, public alertCtrl: AlertController,
-              public loadingCtrl: LoadingController) {
+  constructor(public nav: NavController, public alertCtrl: AlertController,
+              public userProvider: UserProvider, public loadingProvider: LoadingProvider) {
   }
 
   // login and go to home page
@@ -33,23 +33,18 @@ export class LoginPage {
       return alert.present();
     }
 
-    let loading = this.loadingCtrl.create({
-      content: 'Please wait...'
-    });
-    loading.present();
+    this.loadingProvider.present('Please wait...');
 
-    this.authService.login(this.email, this.password).then(authData => {
-      loading.dismiss();
-      this.nav.setRoot(HomePage);
+    this.userProvider.login(this.email, this.password).subscribe(authData => {
+      this.loadingProvider.dismiss();
     }, error => {
-      loading.dismiss();
+      this.loadingProvider.dismiss();
       let alert = this.alertCtrl.create({
         message: error.message,
         buttons: ['OK']
       });
       alert.present();
     });
-    //this.nav.setRoot(HomePage);
   }
 
   // go to register page
